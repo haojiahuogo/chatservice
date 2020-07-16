@@ -1,0 +1,285 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "beego Test API",
+        "description": "beego has a very cool tools to autogenerate documents for your API",
+        "version": "1.0.0",
+        "termsOfService": "http://beego.me/",
+        "contact": {
+            "email": "astaxie@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/msg/Conn": {
+            "get": {
+                "tags": [
+                    "msg"
+                ],
+                "summary": "创建websocket链接",
+                "description": "根据用户信息创建websocket链接",
+                "operationId": "MsgController.创建websocket链接",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userid",
+                        "description": "当前连接的用户id",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ]
+            }
+        },
+        "/msg/CreateConversation": {
+            "post": {
+                "tags": [
+                    "msg"
+                ],
+                "summary": "创建会话",
+                "description": "根据用户创建会话",
+                "operationId": "MsgController.创建会话",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "targetid",
+                        "description": "目标用户ID(你想和谁聊天)",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "userid",
+                        "description": "当前用户ID(你是谁)",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.web.WebResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/msg/DelConversation": {
+            "post": {
+                "tags": [
+                    "msg"
+                ],
+                "summary": "删除会话",
+                "description": "删除会话",
+                "operationId": "MsgController.删除会话",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "cvsid",
+                        "description": "删除的会话id",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "userid",
+                        "description": "操作的用户ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.web.WebResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/msg/GetConversation": {
+            "post": {
+                "tags": [
+                    "msg"
+                ],
+                "summary": "获取会话列表",
+                "description": "获取会话列表包含未读消息数和最后一条消息内容",
+                "operationId": "MsgController.获取会话列表",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "userid",
+                        "description": "用户ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logic.Conversation"
+                        }
+                    }
+                }
+            }
+        },
+        "/msg/GetMsgList": {
+            "post": {
+                "tags": [
+                    "msg"
+                ],
+                "summary": "获取会话消息数据",
+                "description": "获取会话消息数据",
+                "operationId": "MsgController.获取会话消息数据",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "userid",
+                        "description": "用户ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "maxid",
+                        "description": "消息ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "cvsid",
+                        "description": "会话ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logic.Conversation"
+                        }
+                    }
+                }
+            }
+        },
+        "/msg/SendMsg": {
+            "post": {
+                "tags": [
+                    "msg"
+                ],
+                "summary": "发消息",
+                "description": "发消息",
+                "operationId": "MsgController.发消息",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "cvsid",
+                        "description": "会话id",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "content",
+                        "description": "消息内容",
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "userid",
+                        "description": "发消息的用户ID",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "logic.Conversation": {
+            "title": "Conversation",
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "最后一条消息内容",
+                    "type": "string"
+                },
+                "cvsid": {
+                    "description": "会话ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "lastid": {
+                    "description": "最后阅读消息ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "msgid": {
+                    "description": "最后一条消息ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "notsee": {
+                    "description": "当前会话未读消息条数",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "sendtime": {
+                    "description": "最后一条消息发送时间",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "source": {
+                    "description": "最后一条消息发送者ID",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "type": {
+                    "description": "最后一条消息类型",
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "userimg": {
+                    "description": "好友头像",
+                    "type": "string"
+                },
+                "userlist": {
+                    "description": "当前会话所有用户ID",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "好友名称",
+                    "type": "string"
+                }
+            }
+        },
+        "models.web.WebResponse": {
+            "title": "WebResponse",
+            "type": "object"
+        }
+    },
+    "tags": [
+        {
+            "name": "msg",
+            "description": "聊天接口说明\n"
+        }
+    ]
+}

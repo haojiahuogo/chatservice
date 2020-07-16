@@ -1,0 +1,1 @@
+bee generate appcode -tables="message,conversation_user,conversation,user" -driver=mysql -conn="root:123456@tcp(127.0.0.1:3306)/chatdb" -level=1 
